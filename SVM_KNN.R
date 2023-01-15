@@ -6,7 +6,6 @@ require(caTools)
 library(rpart)
 library(kernlab)
 library(klaR)
-library(gbm)
 
 
 data<- read.csv("survey_lung_cancer.csv", sep = ",", header = TRUE)
@@ -21,7 +20,7 @@ testing <- data[-intrain,]
 #To train control
 trctrl <- trainControl(method = "repeatedcv", number = 10, repeats = 3)
 
-#To SVM
+
 seed = 101
 metric <- "Accuracy"
 preProcess=c("center", "scale")
@@ -37,11 +36,11 @@ fit.svm <- train(LUNG_CANCER ~., data = training, method = "svmLinear",
 set.seed(seed)
 fit.knn <- train(LUNG_CANCER~., data=training, method="knn", metric=metric, preProc=c("center", "scale"), trControl=trctrl)
 
-save(fit.svm, fit.lda, fit.gbm, fit.knn,file = "models.RData")
+save(fit.svm, fit.knn,file = "models.RData")
 
 results <- resamples(list(svm=fit.svm, knn=fit.knn))
 
-#bagging=fit.treebag,
+#bagging=fit.treebag
 
 save(results, file = "models_accuracy.RData")
 load("models_accuracy.RData")

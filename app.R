@@ -3,13 +3,14 @@ source("SVM_KNN.R")
 library(shiny)
 library(shinythemes)
 
-# Define UI for application 
+
 ui <- shinyUI(fluidPage(
   # Application title
   titlePanel("Prediction of Lung Cancer Risk"),
   theme = shinytheme("darkly"),
-  # Sidebar with a slider and numeric input  
+  
   sidebarLayout(
+    # Obtain data from user to predict
     sidebarPanel(
       selectInput("GENDER", "GENDER: ", 
                   choices = list("M", "F")
@@ -163,6 +164,7 @@ server <-shinyServer(function(input, output) {
     colnames(prediction)[1] <- "Model"
     colnames(prediction)[2] <- "Prediction"
     
+    #plot graph, histogram and piechart
     output$PieChart <- renderPlot({
       
       ggplot(prediction, aes(x=factor(1), fill = Prediction)) +
@@ -294,7 +296,7 @@ server <-shinyServer(function(input, output) {
     
   })
   
-  
+  #compare SVM and KNN
   output$compare <- renderPlot({
     bwplot(results, par.settings = list(box.rectangle = list(col = "red"),
                                         box.median = list(col = "blue"),
